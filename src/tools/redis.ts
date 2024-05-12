@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+// import { Module } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { createClient, RedisClientType } from 'redis';
 
-@Module({
-  imports: [],
-})
+// @Module({
+//   imports: [],
+// })
+@Injectable()
 export class RedisManager {
   private static instance: RedisManager;
   private client: RedisClientType;

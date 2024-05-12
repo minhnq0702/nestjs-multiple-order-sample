@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Req } from '@nestjs/common';
 import { AppService } from '../svc/app.service';
-import { RedisManager } from '../tools/model_redids';
+import { RedisManager } from '../tools/redis';
 
 @Controller()
 export class AppController {
@@ -40,6 +40,3 @@ export class OrdersController {
     };
   }
 }
-
-// curl with post request
-// curl -X POST http://localhost:3000/orders -H 'Content-Type: application/json' -d '{"name": "order"}'
