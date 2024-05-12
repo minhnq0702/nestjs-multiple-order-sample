@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common';
-import redis from 'redis';
-import { redisClient } from './init_redis';
+import { createClient, RedisClientType } from 'redis';
 
 @Module({
   imports: [],
 })
 export class RedisManager {
   private static instance: RedisManager;
-  private client: redis.RedisClientType;
+  private client: RedisClientType;
 
   constructor() {
     if (!RedisManager.instance) {
       console.log('RedisManager created');
-      this.client = redisClient;
+      this.client = createClient();
       this.client.on('error', (error) => {
         console.error('Redis error:', error);
       });
