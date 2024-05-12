@@ -15,9 +15,11 @@ export class OrderService {
 
     const _sold: number = parseInt(sold, 10);
     if (_sold >= _AVAILABLE_PRODUCTS) {
-      return 'Sold out';
+      throw new Error('Sold out');
     }
 
-    return `Order created ${productKey}`;
+    await this.redisClient.incrBy(productKey, 1);
+
+    return `Order ${productKey} created`;
   }
 }

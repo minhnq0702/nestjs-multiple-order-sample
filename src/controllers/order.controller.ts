@@ -26,8 +26,6 @@ export class OrderController {
     @Res() res: Response,
   ) {
     const { productKey } = body;
-    console.log('===>', productKey, body);
-
     if (!productKey) {
       res.status(400).send({
         msg: 'productKey is required',
@@ -35,10 +33,17 @@ export class OrderController {
       return;
     }
 
-    const order = await this.orderService.createOrder(productKey);
-    res.status(201).send({
-      msg: `Order created ${order}`,
-    });
+    try {
+      const order = await this.orderService.createOrder(productKey);
+      res.status(201).send({
+        msg: `Order created ${order}`,
+      });
+    } catch (error) {
+      console.error('[OrderCtrl] Error:', error.message);
+      res.status(500).send({
+        msg: error.message,
+      });
+    }
     return;
   }
 }
