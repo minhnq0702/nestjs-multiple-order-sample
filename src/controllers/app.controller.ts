@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Req } from '@nestjs/common';
-import { AppService } from './svc/app.service';
-import { RedisManager } from './tools/model_redids';
+import { AppService } from '../svc/app.service';
+import { RedisManager } from '../tools/model_redids';
 
 @Controller()
 export class AppController {
