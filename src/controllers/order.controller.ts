@@ -27,7 +27,10 @@ export class OrderController {
   ) {
     const { productKey } = body;
     if (!productKey) {
-      res.status(400).send({
+      console.log(
+        `[OrderCtrl] productKey is required ${new Date().toISOString()}`,
+      );
+      return res.status(400).send({
         msg: 'productKey is required',
       });
       return;
@@ -36,15 +39,14 @@ export class OrderController {
     try {
       const ordered = await this.orderService.createOrder(productKey);
       console.log('[OrderCtrl]', ordered);
-      res.status(201).send({
+      return res.status(201).send({
         msg: ordered,
       });
     } catch (error) {
       console.error('[OrderCtrl] Error:', error.message);
-      res.status(500).send({
+      return res.status(500).send({
         msg: error.message,
       });
     }
-    return;
   }
 }
