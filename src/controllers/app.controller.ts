@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Req } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from '../svc/app.service';
-import { RedisManager } from '../tools/redis';
 
 @Controller()
 export class AppController {
@@ -9,34 +8,5 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
-  }
-}
-
-@Controller('/orders')
-export class OrdersController {
-  constructor(private readonly redisClient: RedisManager) {}
-  @Get()
-  getOrders(): object {
-    return {
-      status: 200,
-      body: 'This is order api',
-    };
-  }
-
-  @Post()
-  async createOrder(@Req() req: Request): Promise<object> {
-    console.log(req.body);
-    const KEY = 'iPhone15';
-    const count = this.redisClient.get(KEY);
-    if (!count) {
-      this.redisClient.set(KEY, 0);
-    }
-
-    const val = await this.redisClient.incrBy('iPhone15', 1);
-    console.log('haha', val);
-    return {
-      status: 201,
-      body: `Order created ${val}`,
-    };
   }
 }

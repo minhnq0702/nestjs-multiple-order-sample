@@ -11,8 +11,9 @@ export class RedisManager {
   private client: RedisClientType;
 
   constructor() {
+    console.log('[Tools] RedisManager constructor');
     if (!RedisManager.instance) {
-      console.log('RedisManager created');
+      console.log('[Tools] RedisManager created');
       this.client = createClient();
       this.client.on('error', (error) => {
         console.error('Redis error:', error);
