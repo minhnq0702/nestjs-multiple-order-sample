@@ -34,9 +34,10 @@ export class OrderController {
     }
 
     try {
-      const order = await this.orderService.createOrder(productKey);
+      const ordered = await this.orderService.createOrder(productKey);
+      console.log('[OrderCtrl]', ordered);
       res.status(201).send({
-        msg: `Order created ${order}`,
+        msg: ordered,
       });
     } catch (error) {
       console.error('[OrderCtrl] Error:', error.message);
