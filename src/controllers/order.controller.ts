@@ -23,14 +23,14 @@ export class OrderController {
   async createOrder(
     @Req() req: Request,
     @Body() body: order,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
   ) {
     const { productKey } = body;
     if (!productKey) {
       console.log(
         `[OrderCtrl] productKey is required ${new Date().toISOString()}`,
       );
-      return res.status(400).send({
+      res.status(400).send({
         msg: 'productKey is required',
       });
       return;
@@ -39,12 +39,12 @@ export class OrderController {
     try {
       const ordered = await this.orderService.createOrder(productKey);
       console.log('[OrderCtrl]', ordered);
-      return res.status(201).send({
+      res.status(201).send({
         msg: ordered,
       });
     } catch (error) {
       console.error('[OrderCtrl] Error:', error.message);
-      return res.status(500).send({
+      res.status(500).send({
         msg: error.message,
       });
     }
