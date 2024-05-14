@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { OrdersService } from '../../svc/orders.service';
-import { RedisManager } from '../../svc/tools/redis';
+import { OrdersService } from '@svc/orders.service';
+import { RedisManager } from '@svc/tools/redis';
 import { OrdersController } from './orders.controller';
 
 @Module({

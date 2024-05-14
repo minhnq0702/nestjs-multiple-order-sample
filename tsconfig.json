@@ -17,8 +17,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    // "paths": {
-    //   "@redisclient/*": ["src/tools/*"]
-    // }
+    "paths": {
+      "@svc/*": ["src/svc/*"],
+      "@module/*": ["src/modules/*"],
+    }
   }
 }

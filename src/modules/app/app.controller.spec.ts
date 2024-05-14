@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppService } from '../../svc/app.service';
-import { OrdersService } from '../../svc/orders.service';
-import { RedisManager } from '../../svc/tools/redis';
+import { AppService } from '@svc/app.service';
+import { RedisManager } from '@svc/tools/redis';
 import { AppController } from './app.controller';
 
 describe('AppController', () => {
@@ -10,7 +9,7 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService, OrdersService, RedisManager],
+      providers: [AppService, RedisManager],
     }).compile();
 
     appController = app.get<AppController>(AppController);

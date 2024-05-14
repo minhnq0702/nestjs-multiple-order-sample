@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrdersService } from '../../svc/orders.service';
-import { RedisManager } from '../../svc/tools/redis';
+import { OrdersService } from '@svc/orders.service';
+import { RedisManager } from '@svc/tools/redis';
 import { OrdersController } from './orders.controller';
 
 describe('OrderController', () => {
