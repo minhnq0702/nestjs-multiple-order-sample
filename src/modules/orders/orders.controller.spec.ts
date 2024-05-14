@@ -1,23 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RedisManager } from '../tools/redis';
-import { OrderController } from './order.controller';
+import { OrdersService } from '../../svc/orders.service';
+import { RedisManager } from '../../svc/tools/redis';
+import { OrdersController } from './orders.controller';
 
 describe('OrderController', () => {
-  let orderController: OrderController;
+  let ordersController: OrdersController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [OrderController],
-      providers: [RedisManager],
+      controllers: [OrdersController],
+      providers: [OrdersService, RedisManager],
     }).compile();
 
-    orderController = app.get<OrderController>(OrderController);
+    ordersController = app.get<OrdersController>(OrdersController);
   });
 
   describe('getOrders', () => {
     it('[GET] should return an object of show order page', () => {
       // Add your test logic here
-      expect(orderController.getOrders()).toEqual({
+      expect(ordersController.findAll()).toEqual({
         status: 200,
         body: 'This is order api',
       });

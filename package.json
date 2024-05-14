@@ -18,11 +18,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "ab:order": "docker run --rm --read-only -v `pwd`:`pwd` -w `pwd` jordi/ab -T application/json -p ./ab-create-order.json -n 100 -c 2 -s 2 http://host.docker.internal:3000/orders"
+    "ab:order": "docker run --rm --read-only -v `pwd`:`pwd` -w `pwd` jordi/ab -T application/json -p ./ab-create-order.json -n 100 -c 2 -s 2 http://host.docker.internal:3000/orders/benchmark-over-qty"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
     "redis": "^4.6.13",
     "reflect-metadata": "^0.2.0",
@@ -66,7 +67,11 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    
+    "moduleNameMapper": {
+      "@/(.*)": "<rootDir>/$1"
+    }
   },
   "volta": {
     "node": "20.13.1"

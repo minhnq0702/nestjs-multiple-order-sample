@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { RedisManager } from '../tools/redis';
+import { CreateOrderDto } from '../dto/create-order.dto';
+import { UpdateOrderDto } from '../dto/update-order.dto';
+import { RedisManager } from './tools/redis';
 
 const _AVAILABLE_PRODUCTS: number = 10;
 
 @Injectable()
-export class OrderService {
+export class OrdersService {
   constructor(private readonly redisClient: RedisManager) {}
 
   async createOrder(productKey: string): Promise<string> {
@@ -23,5 +25,27 @@ export class OrderService {
       throw new Error('Sold out');
     }
     return `Order ${productKey} created at quantity ${_newSold} at ${new Date().toISOString()}`;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  create(createOrderDto: CreateOrderDto) {
+    return 'This action adds a new order';
+  }
+
+  findAll() {
+    return `This action returns all orders`;
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} order`;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  update(id: number, updateOrderDto: UpdateOrderDto) {
+    return `This action updates a #${id} order`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} order`;
   }
 }
