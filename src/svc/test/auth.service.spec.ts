@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { UsersService } from '@svc/users.service';
 import { AuthService } from '../auth.service';
 
 describe('AuthService', () => {
@@ -6,7 +7,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      providers: [AuthService, UsersService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
@@ -14,5 +15,9 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('userService should be defined', () => {
+    expect(service.usersService).toBeDefined();
   });
 });
