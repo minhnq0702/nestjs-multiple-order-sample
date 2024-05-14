@@ -62,16 +62,19 @@ export class OrdersController {
 
   @Get()
   findAll() {
-    return {
-      status: 200,
-      body: 'This is order api',
-    };
-    // return this.ordersService.findAll();
+    return this.ordersService.findAll();
   }
 
   @Get('/:id')
-  findOne(@Param('id') id: string) {
-    return this.ordersService.findOne(+id);
+  findOne(@Param('id') id: string, @Res({ passthrough: true }) res: Response) {
+    try {
+      return this.ordersService.findOne(+id);
+    } catch (error) {
+      res.status(404).send({
+        msg: error.message,
+      });
+      return;
+    }
   }
 
   @Patch(':id')

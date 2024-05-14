@@ -1,3 +1,4 @@
+import { sampleOrders } from '@entities/order.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrdersService } from '@svc/orders.service';
 import { RedisManager } from '@svc/tools/redis';
@@ -16,12 +17,9 @@ describe('OrderController', () => {
   });
 
   describe('getOrders', () => {
-    it('[GET] should return an object of show order page', () => {
+    it('[GET] should return an array of show all order', () => {
       // Add your test logic here
-      expect(ordersController.findAll()).toEqual({
-        status: 200,
-        body: 'This is order api',
-      });
+      expect(ordersController.findAll().length).toEqual(sampleOrders.length);
     });
   });
 

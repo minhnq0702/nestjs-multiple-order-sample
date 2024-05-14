@@ -1,5 +1,6 @@
 import { CreateOrderDto } from '@dto/create-order.dto';
 import { UpdateOrderDto } from '@dto/update-order.dto';
+import { Order, sampleOrders } from '@entities/order.entity';
 import { Injectable } from '@nestjs/common';
 import { RedisManager } from '@svc/tools/redis';
 
@@ -32,12 +33,17 @@ export class OrdersService {
     return 'This action adds a new order';
   }
 
-  findAll() {
-    return `This action returns all orders`;
+  findAll(): Order[] {
+    return sampleOrders;
+    // return `This action returns all orders`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  findOne(id: number): Order {
+    const o = sampleOrders.find((order) => order.id === id);
+    if (!o) {
+      throw new Error(`Order ${id} not found`);
+    }
+    return o;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

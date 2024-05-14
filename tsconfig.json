@@ -21,6 +21,7 @@
       "@svc/*": ["src/svc/*"],
       "@module/*": ["src/modules/*"],
       "@dto/*": ["src/dto/*"],
+      "@entities/*": ["src/entities/*"],
     }
   }
 }
