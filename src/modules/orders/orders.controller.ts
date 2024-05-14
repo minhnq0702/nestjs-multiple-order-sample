@@ -1,3 +1,5 @@
+import { CreateOrderDto } from '@dto/create-order.dto';
+import { UpdateOrderDto } from '@dto/update-order.dto';
 import {
   Body,
   Controller,
@@ -10,10 +12,8 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { OrdersService } from '@svc/orders.service';
 import { Request, Response } from 'express';
-import { CreateOrderDto } from '../../dto/create-order.dto';
-import { UpdateOrderDto } from '../../dto/update-order.dto';
-import { OrdersService } from '../../svc/orders.service';
 
 export type order = {
   productKey: string;
