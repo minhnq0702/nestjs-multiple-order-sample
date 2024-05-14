@@ -20,6 +20,8 @@ const config: Config = {
     //   '<rootDir>/recipes/$1',
     // ],
     '@svc/(.*)': '<rootDir>/svc/$1',
+    '@module/(.*)': '<rootDir>/module/$1',
+    '@dto/(.*)': '<rootDir>/dto/$1',
   },
 };
 

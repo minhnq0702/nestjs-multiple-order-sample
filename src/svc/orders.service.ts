@@ -1,7 +1,7 @@
+import { CreateOrderDto } from '@dto/create-order.dto';
+import { UpdateOrderDto } from '@dto/update-order.dto';
 import { Injectable } from '@nestjs/common';
-import { CreateOrderDto } from '../dto/create-order.dto';
-import { UpdateOrderDto } from '../dto/update-order.dto';
-import { RedisManager } from './tools/redis';
+import { RedisManager } from '@svc/tools/redis';
 
 const _AVAILABLE_PRODUCTS: number = 10;
 
