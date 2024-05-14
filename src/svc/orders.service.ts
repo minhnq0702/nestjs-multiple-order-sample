@@ -8,7 +8,9 @@ const _AVAILABLE_PRODUCTS: number = 10;
 
 @Injectable()
 export class OrdersService {
-  constructor(private readonly redisClient: RedisManager) {}
+  constructor(private readonly redisClient: RedisManager) {
+    console.log('[Service] OrdersService instantiated');
+  }
 
   async createOrder(productKey: string): Promise<string> {
     console.log(`[OrderSvc] Creating order for product ${productKey}`);
