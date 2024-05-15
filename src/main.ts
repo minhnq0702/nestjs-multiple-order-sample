@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SampleMiddleware } from '@svc/middleware/sample';
 import { AppModule } from './modules/app/app.module';
@@ -8,6 +9,9 @@ async function bootstrap() {
   // global middleware
   app.use(new SampleMiddleware().use);
 
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+
+  await app.listen(configService.get('PORT') || 3000);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
