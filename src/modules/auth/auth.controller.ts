@@ -1,5 +1,11 @@
-import { LoginDto } from '@dto/login.dto';
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { LoginDto } from '@dto/auth.dto';
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from '@svc/auth.service';
 import { Response } from 'express';
 import { Public } from '../../config/auth.config';
@@ -18,7 +24,7 @@ export class AuthController {
       );
 
       if (!jwtKey) {
-        throw new Error('Unauthorized');
+        throw new UnauthorizedException();
       }
 
       return res
@@ -31,9 +37,16 @@ export class AuthController {
           msg: `Logged in as ${loginPayload.username}`,
         });
     } catch (error) {
-      return res.status(401).send({
-        msg: 'Unauthorized',
-      });
+      switch (error.constructor) {
+        case UnauthorizedException:
+          return res.status(401).send({
+            msg: 'Unauthorized',
+          });
+        default:
+          return res.status(500).send({
+            msg: 'Internal server error',
+          });
+      }
     }
   }
 

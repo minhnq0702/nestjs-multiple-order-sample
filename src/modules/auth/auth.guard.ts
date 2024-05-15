@@ -5,12 +5,16 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { AuthService } from '@svc/auth.service';
 import { Request } from 'express';
 import { IS_PUBLIC } from '../../config/auth.config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private authService: AuthService,
+  ) {}
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest<Request>();
 
@@ -27,6 +31,10 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
+    const validated = this.authService.verifyJWT(token);
+    if (!validated) {
+      throw new UnauthorizedException();
+    }
     return true;
   }
 
@@ -36,7 +44,13 @@ export class AuthGuard implements CanActivate {
       return '';
     }
 
-    const _vals = _cookie.split('=');
+    const cookies = _cookie.split(';').map((c) => c.trim());
+    const jwtCookie = cookies.find((c) => c.startsWith('token='));
+    if (!jwtCookie) {
+      return '';
+    }
+
+    const _vals = jwtCookie.split('=');
     if (_vals.length === 2) {
       return _vals[1];
     }

@@ -7,13 +7,16 @@ export class UsersService {
     console.log('[Service] UsersService instantiated');
   }
 
-  findOne({ id, username }: { id?: number; username?: string }): User {
+  findOne({
+    id,
+    username,
+  }: {
+    id?: number;
+    username?: string;
+  }): User | undefined {
     const u = sampleUsers.find(
       (user) => user.id === id || user.username === username,
     );
-    if (!u) {
-      throw new Error(`User not found`);
-    }
     return u;
   }
 }

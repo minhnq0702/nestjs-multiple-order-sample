@@ -1,3 +1,4 @@
+import { SignPayload, VerifiedPayload } from '@dto/auth.dto';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './users.service';
@@ -30,10 +31,24 @@ export class AuthService {
       return false;
     }
 
-    return this.jwtService.sign({
+    return this.signJWT({
       username: user.username,
       email: user.email,
       sub: user.id,
     });
+  }
+
+  private signJWT(signPayload: SignPayload) {
+    return this.jwtService.sign(signPayload);
+  }
+
+  verifyJWT(token: string): boolean {
+    try {
+      const verifiedData = this.jwtService.verify<VerifiedPayload>(token);
+      console.log(`[Service] Verified JWT: ${JSON.stringify(verifiedData)}`);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }
