@@ -5,7 +5,9 @@ import { NextFunction, Request, Response } from 'express';
 export class SampleMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     // Middleware logic goes here
-    console.log('[Middleware] Sample middleware executed');
+    console.log(
+      `[Middleware] Sample middleware executed [${req.method}]: ${req.url}: ${new Date().toUTCString()}`,
+    );
     next();
   }
 }

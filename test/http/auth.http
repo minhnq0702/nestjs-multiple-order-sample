@@ -1,0 +1,21 @@
+POST /auth/login HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "username": "example_user",
+    "password": "example_password"
+}
+
+###
+
+POST /auth/login HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "username": "user1",
+    "password": "password1"
+}
+
+###

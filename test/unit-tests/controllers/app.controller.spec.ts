@@ -1,7 +1,7 @@
+import { AppController } from '@module/app/app.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppService } from '@svc/app.service';
 import { RedisManager } from '@svc/tools/redis';
-import { AppController } from './app.controller';
 
 describe('AppController', () => {
   let appController: AppController;
