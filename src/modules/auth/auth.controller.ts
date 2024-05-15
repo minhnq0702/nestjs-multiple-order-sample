@@ -10,11 +10,24 @@ export class AuthController {
   @Post('login')
   login(@Body() loginPayload: LoginDto, @Res() res: Response) {
     try {
-      this.authServce.authenticate(
+      const jwtKey = this.authServce.authenticate(
         loginPayload.username,
         loginPayload.password,
       );
-      return res.status(200).send(`Logged in as ${loginPayload.username}`);
+
+      if (!jwtKey) {
+        throw new Error('Unauthorized');
+      }
+
+      return res
+        .status(200)
+        .header(
+          'Set-Cookie',
+          `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`,
+        )
+        .send({
+          msg: `Logged in as ${loginPayload.username}`,
+        });
     } catch (error) {
       return res.status(401).send({
         msg: 'Unauthorized',

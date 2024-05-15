@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './users.service';
 
 @Injectable()
 export class AuthService {
   usersService: UsersService;
-  constructor(usersService: UsersService, configService: ConfigService) {
+  jwtService: JwtService;
+
+  constructor(usersService: UsersService, jwtService: JwtService) {
     this.usersService = usersService;
-    console.log('[Service] AuthService instantiated', usersService);
-    console.log(
-      '[Service] AuthService instantiated',
-      configService.get<string>('JWT_SECRET_KEY'),
-    );
+    this.jwtService = jwtService;
+    console.log('[Service] AuthService instantiated');
   }
 
-  authenticate(username: string, password: string): boolean {
+  authenticate(username: string, password: string): boolean | string {
     // Authentication logic goes here
     console.log(`[Service] Authenticating user: ${username} - ${password}`);
 
@@ -26,10 +25,15 @@ export class AuthService {
     }
 
     // * Check password
-    if (password !== 'password') {
+    if (user.password !== password) {
       console.error(`[Service] Invalid password for ${username}`);
       return false;
     }
-    return true;
+
+    return this.jwtService.sign({
+      username: user.username,
+      email: user.email,
+      sub: user.id,
+    });
   }
 }

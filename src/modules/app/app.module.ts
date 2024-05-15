@@ -7,7 +7,7 @@ import { AppService } from '@svc/app.service';
 import { AppController } from './app.controller';
 
 const _configModule = ConfigModule.forRoot({
-  envFilePath: ['.env', '.env.development'],
+  envFilePath: ['.env', '.env.local'],
   isGlobal: true, // * Make the configuration global
   cache: true, // * Enable configuration caching
 });
