@@ -24,7 +24,7 @@ export class AppModule implements NestModule {
 
   configure(consumer: MiddlewareConsumer) {
     // Middleware configuration goes here
-    console.log(`[AppModule] Middleware configuration ${consumer}}`);
+    console.log(`[Module] AppModule Middleware configuration ${consumer}}`);
     // consumer.apply(SampleMiddleware).forRoutes('*');
   }
 }
