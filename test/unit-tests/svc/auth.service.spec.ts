@@ -2,10 +2,10 @@ import { UsersModule } from '@module/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '@svc/auth.service';
-import { AuthController } from '../auth/auth.controller';
+import { UsersService } from '@svc/users.service';
 
-describe('AuthController', () => {
-  let controller: AuthController;
+describe('AuthService', () => {
+  let service: AuthService;
 
   const _configModule = ConfigModule.forRoot({
     envFilePath: ['.env', '.env.development'],
@@ -16,14 +16,17 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [UsersModule, _configModule],
-      controllers: [AuthController],
-      providers: [AuthService],
+      providers: [AuthService, UsersService],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
+    service = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(service).toBeDefined();
+  });
+
+  it('userService should be defined', () => {
+    expect(service.usersService).toBeDefined();
   });
 });

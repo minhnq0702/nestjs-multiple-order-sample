@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 
 const config: Config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: 'src',
+  rootDir: '.',
   testRegex: '.*\\.spec\\.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
@@ -19,10 +19,10 @@ const config: Config = {
     //   '<rootDir>/photos/$1',
     //   '<rootDir>/recipes/$1',
     // ],
-    '@svc/(.*)': '<rootDir>/svc/$1',
-    '@module/(.*)': '<rootDir>/modules/$1',
-    '@dto/(.*)': '<rootDir>/dto/$1',
-    '@entities/(.*)': '<rootDir>/entities/$1',
+    '@svc/(.*)': '<rootDir>/src/svc/$1',
+    '@module/(.*)': '<rootDir>/src/modules/$1',
+    '@dto/(.*)': '<rootDir>/src//dto/$1',
+    '@entities/(.*)': '<rootDir>/src/entities/$1',
   },
 };
 
