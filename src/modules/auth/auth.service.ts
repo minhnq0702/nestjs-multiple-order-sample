@@ -17,6 +17,9 @@ export class AuthService {
   authenticate(username: string, password: string): boolean | string {
     // Authentication logic goes here
     console.log(`[Service] Authenticating user: ${username} - ${password}`);
+    if (!username || !password) {
+      return false;
+    }
 
     // * Find user by username
     const user = this.usersService.findOne({ username: username });
