@@ -2,11 +2,13 @@ import { LoginDto } from '@dto/login.dto';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from '@svc/auth.service';
 import { Response } from 'express';
+import { Public } from '../../config/auth.config';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authServce: AuthService) {}
 
+  @Public()
   @Post('login')
   login(@Body() loginPayload: LoginDto, @Res() res: Response) {
     try {
