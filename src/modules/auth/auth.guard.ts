@@ -1,3 +1,4 @@
+import { AuthService } from '@module/auth/auth.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -5,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from '@svc/auth.service';
 import { Request } from 'express';
 import { IS_PUBLIC } from '../../config/auth.config';
 

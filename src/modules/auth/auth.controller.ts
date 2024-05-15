@@ -1,4 +1,5 @@
 import { LoginDto } from '@dto/auth.dto';
+import { AuthService } from '@module/auth/auth.service';
 import {
   Body,
   Controller,
@@ -6,7 +7,6 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from '@svc/auth.service';
 import { Response } from 'express';
 import { Public } from '../../config/auth.config';
 

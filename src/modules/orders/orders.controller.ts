@@ -12,7 +12,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { OrdersService } from '@svc/orders.service';
+import { OrdersService } from '@src/modules/orders/orders.service';
 import { Request, Response } from 'express';
 
 export type order = {

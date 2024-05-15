@@ -3,8 +3,8 @@ import { OrdersModule } from '@module/orders/orders.module';
 import { UsersModule } from '@module/users/users.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from '@svc/app.service';
 import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 const _configModule = ConfigModule.forRoot({
   envFilePath: ['.env', '.env.local'],

@@ -19,6 +19,7 @@ const config: Config = {
     //   '<rootDir>/photos/$1',
     //   '<rootDir>/recipes/$1',
     // ],
+    '@src/(.*)': '<rootDir>/src/$1',
     '@svc/(.*)': '<rootDir>/src/svc/$1',
     '@module/(.*)': '<rootDir>/src/modules/$1',
     '@dto/(.*)': '<rootDir>/src//dto/$1',

@@ -1,7 +1,7 @@
 import { sampleOrders } from '@entities/order.entity';
 import { OrdersController } from '@module/orders/orders.controller';
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrdersService } from '@svc/orders.service';
+import { OrdersService } from '@src/modules/orders/orders.service';
 import { RedisManager } from '@svc/tools/redis';
 
 describe('OrderController', () => {
