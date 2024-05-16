@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SampleMiddleware } from '@svc/middleware/sample';
@@ -8,6 +9,7 @@ async function bootstrap() {
 
   // global middleware
   app.use(new SampleMiddleware().use);
+  app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
 
