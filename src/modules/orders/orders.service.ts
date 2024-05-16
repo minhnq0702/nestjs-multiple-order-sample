@@ -1,14 +1,16 @@
 import { CreateOrderDto } from '@dto/create-order.dto';
 import { UpdateOrderDto } from '@dto/update-order.dto';
 import { Order, sampleOrders } from '@entities/order.entity';
-import { Injectable } from '@nestjs/common';
-import { RedisManager } from '@svc/tools/redis';
+import { Inject, Injectable } from '@nestjs/common';
+import { RedisManagerType } from '@svc/tools/redis';
 
 const _AVAILABLE_PRODUCTS: number = 10;
 
 @Injectable()
 export class OrdersService {
-  constructor(private readonly redisClient: RedisManager) {
+  constructor(
+    @Inject(RedisManagerType) private readonly redisClient: RedisManagerType,
+  ) {
     console.log('[Service] OrdersService instantiated');
   }
 
