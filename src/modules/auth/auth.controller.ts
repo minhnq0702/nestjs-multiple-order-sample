@@ -7,8 +7,8 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Public } from '@src/config/auth.config';
 import { Response } from 'express';
-import { Public } from '../../config/auth.config';
 
 @Controller('auth')
 export class AuthController {
