@@ -1,15 +1,22 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { SampleMiddleware } from '@svc/middleware/sample';
 import { AppModule } from './app.module';
+import { MyValidationPipeOptions } from './dto/_validator';
+import AllExceptionFilter from './svc/http.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // use global validation pipe
+  app.useGlobalPipes(new ValidationPipe(new MyValidationPipeOptions()));
+
+  const adapter = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionFilter(adapter));
+
   // global middleware
   app.use(new SampleMiddleware().use);
-  app.useGlobalPipes(new ValidationPipe());
 
   const configService = app.get(ConfigService);
 
