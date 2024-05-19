@@ -64,5 +64,6 @@ export class RedisManager implements RedisManagerType {
 
 // change the return type to RedisClientType
 export const getRedisManager = (): RedisClientType => {
-  return RedisManager as unknown as RedisClientType;
+  console.log('[Tools] getRedisManager');
+  return new RedisManager() as unknown as RedisClientType;
 };

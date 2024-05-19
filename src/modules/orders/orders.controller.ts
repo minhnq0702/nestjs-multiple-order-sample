@@ -12,6 +12,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
+import { Public } from '@src/config/auth.config';
 import { OrdersService } from '@src/modules/orders/orders.service';
 import { Request, Response } from 'express';
 
@@ -23,6 +24,7 @@ export type order = {
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @Public()
   @Post('/benchmark-over-qty')
   @Header('Content-Type', 'application/json')
   async createOrder(
@@ -41,18 +43,11 @@ export class OrdersController {
       return;
     }
 
-    try {
-      const ordered = await this.ordersService.createOrder(productKey);
-      console.log('[OrderCtrl]', ordered);
-      res.status(201).send({
-        msg: ordered,
-      });
-    } catch (error) {
-      console.error('[OrderCtrl] Error:', error.message);
-      res.status(500).send({
-        msg: error.message,
-      });
-    }
+    const ordered = await this.ordersService.createOrder(productKey);
+    console.log('[OrderCtrl]', ordered);
+    res.status(201).send({
+      msg: ordered,
+    });
   }
 
   @Post()
