@@ -1,4 +1,4 @@
-POST /auth/login HTTP/1.1
+POST /api/auth/login HTTP/1.1
 Host: localhost:3000
 Content-Type: application/json
 
@@ -8,8 +8,7 @@ Content-Type: application/json
 }
 
 ###
-
-POST /auth/login HTTP/1.1
+POST /api/auth/login HTTP/1.1
 Host: localhost:3000
 Content-Type: application/json
 
@@ -19,3 +18,11 @@ Content-Type: application/json
 }
 
 ###
+POST /api/auth/register HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin"
+}

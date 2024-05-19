@@ -9,6 +9,9 @@ import AllExceptionFilter from './svc/http.exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // * define global prefix
+  app.setGlobalPrefix('/api');
+
   // use global validation pipe
   app.useGlobalPipes(new ValidationPipe(new MyValidationPipeOptions()));
 
