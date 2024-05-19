@@ -6,8 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC } from '@src/config/auth.config';
+import { VerifiedPayload } from '@src/dto/auth.dto';
 import { Request } from 'express';
-import { IS_PUBLIC } from '../../config/auth.config';
+
+type RequestWithUser = Request & { user: VerifiedPayload };
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,7 +19,7 @@ export class AuthGuard implements CanActivate {
     private authService: AuthService,
   ) {}
   canActivate(context: ExecutionContext): boolean {
-    const req = context.switchToHttp().getRequest<Request>();
+    const req = context.switchToHttp().getRequest<RequestWithUser>();
 
     // * Skip if route is public
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
@@ -31,10 +34,11 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
-    const validated = this.authService.verifyJWT(token);
+    const [validated, verifiedData] = this.authService.verifyJWT(token);
     if (!validated) {
       throw new UnauthorizedException();
     }
+    req.user = verifiedData;
     return true;
   }
 

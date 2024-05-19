@@ -2,7 +2,7 @@ import { sampleOrders } from '@entities/order.entity';
 import { OrdersController } from '@module/orders/orders.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrdersService } from '@src/modules/orders/orders.service';
-import { RedisManager } from '@svc/tools/redis';
+import { RedisManagerType, getRedisManager } from '@svc/tools/redis';
 
 describe('OrderController', () => {
   let ordersController: OrdersController;
@@ -10,7 +10,13 @@ describe('OrderController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [OrdersController],
-      providers: [OrdersService, RedisManager],
+      providers: [
+        OrdersService,
+        {
+          provide: RedisManagerType,
+          useFactory: getRedisManager,
+        },
+      ],
     }).compile();
 
     ordersController = app.get<OrdersController>(OrdersController);
