@@ -15,13 +15,12 @@ export class OrdersService {
   }
 
   async createOrder(productKey: string): Promise<string> {
-    console.log(`[OrderSvc] Creating order for product ${productKey}`);
     const sold = await this.redisClient.get(productKey);
     if (!sold) {
       console.log(
         `[OrderSvc] Product ${productKey} not found, creating new key`,
       );
-      await this.redisClient.set(productKey, '0');
+      await this.redisClient.setnx(productKey, '0');
     }
 
     // const _sold: number = parseInt(sold, 10);
