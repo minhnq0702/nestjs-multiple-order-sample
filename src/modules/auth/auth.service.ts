@@ -45,13 +45,13 @@ export class AuthService {
     return this.jwtService.sign(signPayload);
   }
 
-  verifyJWT(token: string): boolean {
+  verifyJWT(token: string): [boolean, VerifiedPayload] {
     try {
       const verifiedData = this.jwtService.verify<VerifiedPayload>(token);
       console.log(`[Service] Verified JWT: ${JSON.stringify(verifiedData)}`);
-      return true;
+      return [true, verifiedData];
     } catch (error) {
-      return false;
+      return [false, null];
     }
   }
 }
