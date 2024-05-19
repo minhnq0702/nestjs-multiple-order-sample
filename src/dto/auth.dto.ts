@@ -8,6 +8,8 @@ export class LoginDto {
   password: string;
 }
 
+export class RegisterDto extends LoginDto {}
+
 export class SignPayload {
   username: string;
   email: string;
