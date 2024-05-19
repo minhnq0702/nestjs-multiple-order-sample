@@ -9,7 +9,7 @@ import { OrdersController } from './orders.controller';
     OrdersService,
     {
       provide: RedisManagerType,
-      useFactory: getRedisManager,
+      useClass: getRedisManager(),
     },
   ],
 })

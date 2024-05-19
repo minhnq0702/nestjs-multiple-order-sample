@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { createClient, RedisClientType } from 'redis';
+import { ConfigService } from '@nestjs/config';
+import { RedisClientType, createClient } from 'redis';
 
 // adding interface for RedisManager
 export interface RedisManagerType {
@@ -17,11 +18,16 @@ export class RedisManager implements RedisManagerType {
   private static instance: RedisManager;
   private client: RedisClientType;
 
-  constructor() {
-    console.log('[Tools] RedisManager constructor');
+  constructor(private readonly configService: ConfigService) {
+    console.log(
+      '[Tools] RedisManager constructor',
+      configService.get('REDIS_URL'),
+    );
     if (!RedisManager.instance) {
       console.log('[Tools] RedisManager created');
-      this.client = createClient();
+      this.client = createClient({
+        url: configService.get('REDIS_URL'),
+      });
       this.client.on('error', (error) => {
         console.error('Redis error:', error);
       });
@@ -63,7 +69,6 @@ export class RedisManager implements RedisManagerType {
 }
 
 // change the return type to RedisClientType
-export const getRedisManager = (): RedisClientType => {
-  console.log('[Tools] getRedisManager');
-  return new RedisManager() as unknown as RedisClientType;
+export const getRedisManager = (): any => {
+  return RedisManager as unknown as RedisClientType;
 };

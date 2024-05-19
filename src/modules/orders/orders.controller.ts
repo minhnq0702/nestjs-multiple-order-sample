@@ -34,9 +34,6 @@ export class OrdersController {
   ) {
     const { productKey } = body;
     if (!productKey) {
-      console.log(
-        `[OrderCtrl] productKey is required ${new Date().toISOString()}`,
-      );
       res.status(400).send({
         msg: 'productKey is required',
       });
@@ -44,7 +41,6 @@ export class OrdersController {
     }
 
     const ordered = await this.ordersService.createOrder(productKey);
-    console.log('[OrderCtrl]', ordered);
     res.status(201).send({
       msg: ordered,
     });
