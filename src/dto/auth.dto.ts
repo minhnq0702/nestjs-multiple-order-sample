@@ -13,7 +13,7 @@ export class RegisterDto extends LoginDto {}
 export class SignPayload {
   username: string;
   email: string;
-  sub: number;
+  sub: number | string;
 }
 
 export class VerifiedPayload extends SignPayload {

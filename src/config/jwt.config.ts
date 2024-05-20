@@ -10,3 +10,14 @@ export const jwtConfig = (): JwtModuleAsyncOptions => {
     }),
   };
 };
+
+export const jwtRConfig = (): JwtModuleAsyncOptions => {
+  return {
+    useFactory: () => ({
+      secret: process.env.JWT_SECRET_RKEY,
+      signOptions: {
+        expiresIn: process.env.JWT_REXPRIES_IN,
+      },
+    }),
+  };
+};

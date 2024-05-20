@@ -39,9 +39,9 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  register(@Body() body: RegisterDto) {
+  async register(@Body() body: RegisterDto) {
     console.debug('Register payload', body);
-    this.authServce.register(body.username, body.password);
+    await this.authServce.register(body.username, body.password);
     return '// TODO this is register API';
   }
 }

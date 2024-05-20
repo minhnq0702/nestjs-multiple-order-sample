@@ -55,7 +55,7 @@ export class AuthService {
     }
   }
 
-  register(username: string, password: string): boolean {
+  async register(username: string, password: string): Promise<boolean> {
     // Registration logic goes here
     console.log(`[Service] Registering user: ${username} - ${password}`);
     if (!username || !password) {
@@ -70,7 +70,7 @@ export class AuthService {
     }
 
     // * Create user
-    this.usersService.create({ username, password });
+    await this.usersService.create({ username, password });
     return true;
   }
 }
