@@ -6,7 +6,7 @@ import { RedisClientType, createClient } from 'redis';
 export interface RedisManagerType {
   set(key: string, value: string | number): Promise<string>;
   get(key: string): Promise<string | null>;
-  delete(key: string): Promise<number>;
+  delete(key: string): Promise<void>;
   setnx(key: string, value: string): Promise<boolean>;
   incrBy(key: string, value: number): Promise<number>;
   decrBy(key: string, value: number): Promise<number>;
@@ -21,17 +21,15 @@ export class RedisManager implements RedisManagerType {
   constructor(private readonly configService: ConfigService) {
     if (!RedisManager.instance) {
       this.client = createClient({
-        url: configService.get('REDIS_URL'),
+        url: this.configService.get('REDIS_URL'),
       });
       this.client.on('error', (error) => {
         console.error('Redis error:', error);
       });
       this.client.connect();
       RedisManager.instance = this;
-      console.log(
-        '[Tools] RedisManager constructor',
-        configService.get('REDIS_URL'),
-      );
+      // eslint-disable-next-line prettier/prettier
+      console.log('[Tools] RedisManager constructor', this.configService.get('REDIS_URL'));
     } else {
       console.log('[Tools] RedisManager instance already exists');
     }
@@ -48,9 +46,9 @@ export class RedisManager implements RedisManagerType {
     return res;
   }
 
-  public async delete(key: string): Promise<number> {
-    const res = await this.client.del(key);
-    return res;
+  public async delete(key: string): Promise<void> {
+    await this.client.del(key);
+    return;
   }
 
   public async setnx(key: string, value: string): Promise<boolean> {

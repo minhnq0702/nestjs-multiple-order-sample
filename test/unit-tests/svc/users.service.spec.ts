@@ -1,12 +1,13 @@
 import { UsersService } from '@module/users/users.service';
 import { Test, TestingModule } from '@nestjs/testing';
+import { MockRedisManager } from '@src/svc/tools/mockRedis';
 
 describe('UsersService', () => {
   let service: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      providers: [UsersService, MockRedisManager],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
