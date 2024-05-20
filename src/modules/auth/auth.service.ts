@@ -54,4 +54,23 @@ export class AuthService {
       return [false, null];
     }
   }
+
+  register(username: string, password: string): boolean {
+    // Registration logic goes here
+    console.log(`[Service] Registering user: ${username} - ${password}`);
+    if (!username || !password) {
+      return false;
+    }
+
+    // * Check if user exists
+    const user = this.usersService.findOne({ username: username });
+    if (user) {
+      console.error(`[Service] User ${username} already exists`);
+      return false;
+    }
+
+    // * Create user
+    this.usersService.create({ username, password });
+    return true;
+  }
 }

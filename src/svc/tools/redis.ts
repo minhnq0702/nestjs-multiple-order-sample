@@ -19,12 +19,7 @@ export class RedisManager implements RedisManagerType {
   private client: RedisClientType;
 
   constructor(private readonly configService: ConfigService) {
-    console.log(
-      '[Tools] RedisManager constructor',
-      configService.get('REDIS_URL'),
-    );
     if (!RedisManager.instance) {
-      console.log('[Tools] RedisManager created');
       this.client = createClient({
         url: configService.get('REDIS_URL'),
       });
@@ -33,6 +28,12 @@ export class RedisManager implements RedisManagerType {
       });
       this.client.connect();
       RedisManager.instance = this;
+      console.log(
+        '[Tools] RedisManager constructor',
+        configService.get('REDIS_URL'),
+      );
+    } else {
+      console.log('[Tools] RedisManager instance already exists');
     }
     return RedisManager.instance;
   }

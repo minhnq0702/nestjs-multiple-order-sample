@@ -1,4 +1,4 @@
-import { LoginDto } from '@dto/auth.dto';
+import { LoginDto, RegisterDto } from '@dto/auth.dto';
 import { AuthService } from '@module/auth/auth.service';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
@@ -36,4 +36,12 @@ export class AuthController {
   // async logout(@Req() req, @Res() res) {
   //   return res.send('Logged out');
   // }
+
+  @Public()
+  @Post('register')
+  register(@Body() body: RegisterDto) {
+    console.debug('Register payload', body);
+    this.authServce.register(body.username, body.password);
+    return '// TODO this is register API';
+  }
 }
