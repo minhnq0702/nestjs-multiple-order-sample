@@ -8,18 +8,14 @@ const _AVAILABLE_PRODUCTS: number = 10;
 
 @Injectable()
 export class OrdersService {
-  constructor(
-    @Inject(RedisManagerType) private readonly redisClient: RedisManagerType,
-  ) {
+  constructor(@Inject(RedisManagerType) private readonly redisClient: RedisManagerType) {
     console.log('[Service] OrdersService instantiated');
   }
 
   async createOrder(productKey: string): Promise<string> {
     const sold = await this.redisClient.get(productKey);
     if (!sold) {
-      console.log(
-        `[OrderSvc] Product ${productKey} not found, creating new key`,
-      );
+      console.log(`[OrderSvc] Product ${productKey} not found, creating new key`);
       await this.redisClient.setnx(productKey, '0');
     }
 
