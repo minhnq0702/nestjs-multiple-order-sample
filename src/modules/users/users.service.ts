@@ -1,4 +1,4 @@
-import { User, sampleUsers } from '@entities/user.entity';
+import { User } from '@entities/user.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { UserAlreadyExist } from '@src/entities/error.entity';
 import { RedisManagerType } from '@src/svc/tools/redis';
@@ -11,16 +11,37 @@ export class UsersService {
     console.log('[Service] UsersService instantiated');
   }
 
-  findOne({ id, username }: { id?: number | string; username?: string }): User | undefined {
-    const u = sampleUsers.find((user) => user.id === id || user.username === username);
-    return u;
+  async hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 10);
+  }
+
+  async comparePassword(password: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(password, hash);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async findOne({ id, username }: { id?: number | string; username?: string }): Promise<User> {
+    // const u = sampleUsers.find((user) => user.id === id || user.username === username);
+    const _user: string = await this.redisClient.get(`user:${username}`);
+    if (!_user) {
+      return null;
+    }
+
+    try {
+      const u: User = JSON.parse(_user);
+      return u;
+    } catch (error) {
+      console.error('Error parsing user from Redis', error);
+      return null;
+    }
   }
 
   async create(user: User): Promise<User> {
+    // Check if user already exists in redis
     const userExists = this.checkExistence(user.username);
 
     // hash password
-    const _hashPassword = bcrypt.hash(user.password, 10);
+    const _hashPassword = this.hashPassword(user.password);
 
     if (await userExists) {
       throw new UserAlreadyExist();
