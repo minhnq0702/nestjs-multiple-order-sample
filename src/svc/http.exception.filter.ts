@@ -7,7 +7,7 @@ export default class AllExceptionFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: Error, host: ArgumentsHost): void {
-    console.log('[AllExceptionFilter] exception', exception.message);
+    console.debug('[AllExceptionFilter] exception', exception);
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 
