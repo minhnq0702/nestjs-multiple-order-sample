@@ -13,7 +13,7 @@ import { AuthGuard } from './auth.guard';
   providers: [
     AuthService,
     {
-      provide: APP_GUARD,
+      provide: APP_GUARD, // * Register AuthGuard as global guard
       useClass: AuthGuard,
     },
   ],

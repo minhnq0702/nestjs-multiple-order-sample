@@ -12,24 +12,31 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Body() loginPayload: LoginDto, @Res() res: Response) {
-    const jwtKey = await this.authServce.authenticate(loginPayload.username, loginPayload.password);
+    const authResult = await this.authServce.authenticate(loginPayload.username, loginPayload.password);
+    if (typeof authResult === 'boolean') {
+      throw new LoginFail();
+    }
+    const [jwtKey, refreshKey] = authResult;
 
     if (!jwtKey) {
       throw new LoginFail();
     }
 
+    // .header('Set-Cookie', `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`)
     return res
       .status(200)
-      .header('Set-Cookie', `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`)
+      .cookie('token', jwtKey.toString(), { httpOnly: true, secure: true, sameSite: 'lax' })
       .send({
         msg: `Logged in as ${loginPayload.username}`,
+        refreshToken: refreshKey,
       });
   }
 
-  // @Post('logout')
-  // async logout(@Req() req, @Res() res) {
-  //   return res.send('Logged out');
-  // }
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    // return res.send('Logged out');
+    return res.status(200).clearCookie('token').send('Logged out');
+  }
 
   @Public()
   @Post('register')

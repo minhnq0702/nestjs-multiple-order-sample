@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
-    const [validated, verifiedData] = this.authService.verifyJWT(token);
+    const [validated, verifiedData] = this.authService.verify_JWT(token);
     if (!validated) {
       throw new UnauthorizedException();
     }
