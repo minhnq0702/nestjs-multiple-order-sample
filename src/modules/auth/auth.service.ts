@@ -39,7 +39,7 @@ export class AuthService {
       return false;
     }
 
-    return [
+    return Promise.all([
       this.sign_JWT({
         username: user.username,
         email: user.email,
@@ -50,11 +50,11 @@ export class AuthService {
         email: user.email,
         sub: user.id,
       }),
-    ];
+    ]);
   }
 
-  private sign_JWT(signPayload: SignPayload) {
-    return this.jwtService.sign(signPayload, {
+  private async sign_JWT(signPayload: SignPayload) {
+    return this.jwtService.signAsync(signPayload, {
       secret: this.configService.get<string>('JWT_SECRET_KEY'),
       expiresIn: this.configService.get<string>('JWT_EXPIRES_IN'),
     });
@@ -72,8 +72,8 @@ export class AuthService {
     }
   }
 
-  private sign_REFRESH_JWT(signPayload: SignPayload) {
-    return this.jwtService.sign(signPayload, {
+  private async sign_REFRESH_JWT(signPayload: SignPayload) {
+    return this.jwtService.signAsync(signPayload, {
       secret: this.configService.get<string>('JWT_SECRET_RKEY'),
       expiresIn: this.configService.get<string>('JWT_REXPRIES_IN'),
     });
