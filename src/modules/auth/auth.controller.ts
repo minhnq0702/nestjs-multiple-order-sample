@@ -12,10 +12,7 @@ export class AuthController {
   @Public()
   @Post('login')
   login(@Body() loginPayload: LoginDto, @Res() res: Response) {
-    const jwtKey = this.authServce.authenticate(
-      loginPayload.username,
-      loginPayload.password,
-    );
+    const jwtKey = this.authServce.authenticate(loginPayload.username, loginPayload.password);
 
     if (!jwtKey) {
       throw new LoginFail();
@@ -23,10 +20,7 @@ export class AuthController {
 
     return res
       .status(200)
-      .header(
-        'Set-Cookie',
-        `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      )
+      .header('Set-Cookie', `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`)
       .send({
         msg: `Logged in as ${loginPayload.username}`,
       });
@@ -39,9 +33,9 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  async register(@Body() body: RegisterDto) {
-    console.debug('Register payload', body);
-    await this.authServce.register(body.username, body.password);
+  async register(@Body() registerPayload: RegisterDto) {
+    console.debug('Register payload', registerPayload);
+    await this.authServce.register(registerPayload.username, registerPayload.password);
     return '// TODO this is register API';
   }
 }
