@@ -11,8 +11,8 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  login(@Body() loginPayload: LoginDto, @Res() res: Response) {
-    const jwtKey = this.authServce.authenticate(loginPayload.username, loginPayload.password);
+  async login(@Body() loginPayload: LoginDto, @Res() res: Response) {
+    const jwtKey = await this.authServce.authenticate(loginPayload.username, loginPayload.password);
 
     if (!jwtKey) {
       throw new LoginFail();
