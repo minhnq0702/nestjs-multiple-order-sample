@@ -45,7 +45,6 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() registerPayload: RegisterDto, @Res() res: Response) {
-    console.debug('Register payload', registerPayload);
     const success = await this.authServce.register(registerPayload.username, registerPayload.password);
     if (!success) {
       throw new RegisterFail({
