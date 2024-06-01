@@ -21,7 +21,6 @@ export class UsersService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findOne({ id, username }: { id?: number | string; username?: string }): Promise<User> {
-    // const u = sampleUsers.find((user) => user.id === id || user.username === username);
     const _user: string = await this.redisClient.get(`user:${username}`);
     if (!_user) {
       return null;
