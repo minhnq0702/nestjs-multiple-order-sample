@@ -68,11 +68,11 @@ export class UsersService {
           _user[key] = fieldsUpdate[key];
         }
       });
-      user.updateDate = new Date();
+      _user.updateDate = new Date();
     }
 
     // update user in Redis
-    this.redisClient.set(`user:${user.username}`, JSON.stringify(user));
+    this.redisClient.set(`user:${_user.username}`, JSON.stringify(_user));
     return user;
   }
 

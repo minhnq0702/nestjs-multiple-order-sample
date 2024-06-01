@@ -125,8 +125,16 @@ export class AuthService {
       return [null, null];
     }
 
+    if (!user.refreshToken || user.refreshToken !== token) {
+      console.error(`[Service] Invalid refresh token: ${token}`);
+      return [null, null];
+    }
+
     // * Generate new tokens
     const [newToken, newRefreshToken] = await this.get_tokens(user);
+
+    // * Update refresh token in user
+    this.usersService.update(user, { refreshToken: newRefreshToken });
     return [newToken, newRefreshToken];
   }
 }
