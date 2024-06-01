@@ -94,6 +94,6 @@ export class UsersService {
   async checkExistence(username: string): Promise<boolean> {
     // check if user exists in Redis
     const user = await this.redisClient.keys(`user:*:${username}`);
-    return user !== null;
+    return user.length !== 0;
   }
 }
