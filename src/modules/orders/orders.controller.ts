@@ -1,17 +1,6 @@
 import { CreateOrderDto } from '@dto/create-order.dto';
 import { UpdateOrderDto } from '@dto/update-order.dto';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Header,
-  Param,
-  Patch,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, Param, Patch, Post, Req, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
 import { OrdersService } from '@src/modules/orders/orders.service';
 import { Request, Response } from 'express';
@@ -27,11 +16,7 @@ export class OrdersController {
   @Public()
   @Post('/benchmark-over-qty')
   @Header('Content-Type', 'application/json')
-  async createOrder(
-    @Req() req: Request,
-    @Body() body: order,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async createOrder(@Req() req: Request, @Body() body: order, @Res({ passthrough: true }) res: Response) {
     const { productKey } = body;
     if (!productKey) {
       res.status(400).send({

@@ -24,8 +24,6 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   await app.listen(configService.get('PORT') || 3000);
-  console.log(
-    `Application is running on: ${await app.getUrl()} - ${process.pid}`,
-  );
+  console.log(`Application is running on: ${await app.getUrl()} - ${process.pid}`);
 }
 bootstrap();

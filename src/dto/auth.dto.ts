@@ -8,10 +8,17 @@ export class LoginDto {
   password: string;
 }
 
+export class RegisterDto extends LoginDto {}
+
+export class RefreshTokenDto {
+  @IsString()
+  refreshToken: string;
+}
+
 export class SignPayload {
   username: string;
   email: string;
-  sub: number;
+  sub: number | string;
 }
 
 export class VerifiedPayload extends SignPayload {

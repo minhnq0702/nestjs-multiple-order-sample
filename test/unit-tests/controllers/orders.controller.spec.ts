@@ -2,7 +2,8 @@ import { sampleOrders } from '@entities/order.entity';
 import { OrdersController } from '@module/orders/orders.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrdersService } from '@src/modules/orders/orders.service';
-import { RedisManagerType, getRedisManager } from '@svc/tools/redis';
+import { getMockRedisManager } from '@src/svc/tools/mockRedis';
+import { RedisManagerType } from '@src/svc/tools/redis';
 
 describe('OrderController', () => {
   let ordersController: OrdersController;
@@ -14,7 +15,7 @@ describe('OrderController', () => {
         OrdersService,
         {
           provide: RedisManagerType,
-          useFactory: getRedisManager,
+          useClass: getMockRedisManager(),
         },
       ],
     }).compile();

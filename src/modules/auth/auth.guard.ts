@@ -1,12 +1,8 @@
 import { AuthService } from '@module/auth/auth.service';
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC } from '@src/config/auth.config';
+import { JWT_KEY } from '@src/config/jwt.config';
 import { VerifiedPayload } from '@src/dto/auth.dto';
 import { Request } from 'express';
 
@@ -22,10 +18,7 @@ export class AuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<RequestWithUser>();
 
     // * Skip if route is public
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [context.getHandler(), context.getClass()]);
     if (isPublic) {
       return true;
     }
@@ -34,7 +27,7 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
-    const [validated, verifiedData] = this.authService.verifyJWT(token);
+    const [validated, verifiedData] = this.authService.verify_JWT(token, JWT_KEY);
     if (!validated) {
       throw new UnauthorizedException();
     }

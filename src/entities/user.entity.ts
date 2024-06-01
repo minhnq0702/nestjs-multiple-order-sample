@@ -1,22 +1,27 @@
 export class User {
-  id: number;
+  id?: number | string;
   username: string;
   password: string;
-  email: string;
+  email?: string;
+  refreshToken?: string;
+  updateDate?: Date;
 
-  constructor(username: string, password: string, email: string) {
+  constructor(id: number, username: string, password: string, email: string) {
+    this.id = id;
     this.username = username;
     this.password = password;
     this.email = email;
   }
 }
 
-// add 20 sample users
+// add 20 mock users
 export const sampleUsers: User[] = Array.from({ length: 20 }, (_, i) => {
   return {
     id: i + 1,
     username: `user${i + 1}`,
     password: `password${i + 1}`,
     email: `user${i + 1}@gamil.com`,
+    refreshToken: `refreshToken${i + 1}`,
+    updateDate: new Date(),
   };
 });

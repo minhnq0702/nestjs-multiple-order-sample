@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '@src/app.controller';
 import { AppService } from '@src/app.service';
-import { RedisManager } from '@svc/tools/redis';
+import { MockRedisManager } from '@src/svc/tools/mockRedis';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -9,7 +9,7 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService, RedisManager],
+      providers: [AppService, MockRedisManager],
     }).compile();
 
     appController = app.get<AppController>(AppController);

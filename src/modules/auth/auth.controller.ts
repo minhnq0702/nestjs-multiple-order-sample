@@ -1,4 +1,4 @@
-import { LoginDto } from '@dto/auth.dto';
+import { LoginDto, RefreshTokenDto, RegisterDto } from '@dto/auth.dto';
 import { AuthService } from '@module/auth/auth.service';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
@@ -11,29 +11,57 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  login(@Body() loginPayload: LoginDto, @Res() res: Response) {
-    const jwtKey = this.authServce.authenticate(
-      loginPayload.username,
-      loginPayload.password,
-    );
+  async login(@Body() loginPayload: LoginDto, @Res() res: Response) {
+    const authResult = await this.authServce.authenticate(loginPayload.username, loginPayload.password);
+    if (typeof authResult === 'boolean') {
+      throw new LoginFail();
+    }
+    const [token, refreshToken] = authResult;
 
-    if (!jwtKey) {
+    if (!token) {
       throw new LoginFail();
     }
 
+    // .header('Set-Cookie', `token=${token.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`)
     return res
       .status(200)
-      .header(
-        'Set-Cookie',
-        `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`,
-      )
+      .cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' })
       .send({
         msg: `Logged in as ${loginPayload.username}`,
+        refreshToken: refreshToken,
       });
   }
 
-  // @Post('logout')
-  // async logout(@Req() req, @Res() res) {
-  //   return res.send('Logged out');
-  // }
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    // return res.send('Logged out');
+    return res.status(200).clearCookie('token').send('Logged out');
+  }
+
+  @Public()
+  @Post('register')
+  async register(@Body() registerPayload: RegisterDto) {
+    console.debug('Register payload', registerPayload);
+    await this.authServce.register(registerPayload.username, registerPayload.password);
+    return '// TODO this is register API';
+  }
+
+  @Public()
+  @Post('refresh')
+  async refreshToken(@Body() body: RefreshTokenDto, @Res() res: Response) {
+    // Check if refresh token is valid by decode it
+    // If valid, check if token is existed in Redis / Databse
+    // If valid, generate new token + refreshToken and return them
+    const [token, refreshToken] = await this.authServce.refreshToken(body.refreshToken);
+
+    // If not, return 401
+    if (!token || !refreshToken) {
+      throw new LoginFail();
+    }
+
+    return res.status(200).cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' }).send({
+      msg: 'Token refreshed',
+      refreshToken: refreshToken,
+    });
+  }
 }

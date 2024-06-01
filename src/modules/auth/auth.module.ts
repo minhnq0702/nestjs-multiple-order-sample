@@ -3,17 +3,16 @@ import { UsersModule } from '@module/users/users.module';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConfig } from 'src/config/jwt.config';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 
 @Module({
-  imports: [UsersModule, JwtModule.registerAsync(jwtConfig())],
+  imports: [UsersModule, JwtModule],
   controllers: [AuthController],
   providers: [
     AuthService,
     {
-      provide: APP_GUARD,
+      provide: APP_GUARD, // * Register AuthGuard as global guard
       useClass: AuthGuard,
     },
   ],
