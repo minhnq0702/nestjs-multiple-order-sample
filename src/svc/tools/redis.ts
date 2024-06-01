@@ -5,6 +5,7 @@ import { RedisClientType, createClient } from 'redis';
 
 // adding interface for RedisManager
 export interface RedisManagerType {
+  keys(pattern: string): Promise<string[]>;
   set(key: string, value: string | number): Promise<string>;
   get(key: string): Promise<string | null>;
   delete(key: string): Promise<void>;
@@ -38,6 +39,11 @@ export class RedisManager implements RedisManagerType {
       RedisManager.instance.logger.warn('RedisManager instance already exists');
     }
     return RedisManager.instance;
+  }
+
+  public async keys(pattern: string): Promise<string[]> {
+    const res = await this.client.keys(pattern);
+    return res;
   }
 
   public async set(key: string, value: string | number): Promise<string> {

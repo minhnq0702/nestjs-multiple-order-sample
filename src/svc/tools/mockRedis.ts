@@ -9,6 +9,11 @@ export class MockRedisManager implements RedisManagerType {
     this.data = new Map();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async keys(pattern: string): Promise<string[]> {
+    return Promise.resolve([]);
+  }
+
   async set(key: string, value: string): Promise<string> {
     this.data.set(key, value);
     return value;
@@ -61,5 +66,4 @@ export class MockRedisManager implements RedisManagerType {
   // }
 }
 
-export const getMockRedisManager = (): any =>
-  MockRedisManager as unknown as RedisManagerType;
+export const getMockRedisManager = (): any => MockRedisManager as unknown as RedisManagerType;
