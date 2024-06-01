@@ -16,19 +16,19 @@ export class AuthController {
     if (typeof authResult === 'boolean') {
       throw new LoginFail();
     }
-    const [jwtKey, refreshKey] = authResult;
+    const [token, refreshToken] = authResult;
 
-    if (!jwtKey) {
+    if (!token) {
       throw new LoginFail();
     }
 
-    // .header('Set-Cookie', `token=${jwtKey.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`)
+    // .header('Set-Cookie', `token=${token.toString()}; Path=/; HttpOnly; Secure; SameSite=Lax`)
     return res
       .status(200)
-      .cookie('token', jwtKey.toString(), { httpOnly: true, secure: true, sameSite: 'lax' })
+      .cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' })
       .send({
         msg: `Logged in as ${loginPayload.username}`,
-        refreshToken: refreshKey,
+        refreshToken: refreshToken,
       });
   }
 
@@ -48,18 +48,21 @@ export class AuthController {
 
   @Public()
   @Post('refresh')
-  async refreshToken(@Body() body: object, @Res() res: Response) {
+  async refreshToken(@Body() body: { refreshToken: string }, @Res() res: Response) {
     console.log('refreshingToken', body);
     // Check if refresh token is valid by decode it
-
     // If valid, check if token is existed in Redis / Databse
+    // If valid, generate new token + refreshToken and return them
+    const [token, refreshToken] = await this.authServce.refreshToken(body.refreshToken);
 
     // If not, return 401
+    if (!token || !refreshToken) {
+      throw new LoginFail();
+    }
 
-    // If valid, generate new token + refreshToken and return them
-    return res.status(200).cookie('token', 'refreshedToken').send({
-      msg: 'Token refreshed',
-      refreshToken: 'Refreshed token',
+    return res.status(200).cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' }).send({
+      msg: 'Token refreshed adfasdf 4234234',
+      refreshToken: refreshToken,
     });
   }
 }

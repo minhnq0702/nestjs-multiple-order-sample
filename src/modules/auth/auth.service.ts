@@ -2,6 +2,7 @@ import { SignPayload, VerifiedPayload } from '@dto/auth.dto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { JWT_REFRESH_KEY } from '@src/config/jwt.config';
 import { User } from '@src/entities/user.entity';
 import { UsersService } from '../users/users.service';
 
@@ -77,10 +78,10 @@ export class AuthService {
     });
   }
 
-  verify_JWT(token: string): [boolean, VerifiedPayload] {
+  verify_JWT(token: string, key: string): [boolean, VerifiedPayload] {
     try {
       const verifiedData = this.jwtService.verify<VerifiedPayload>(token, {
-        secret: this.configService.get<string>('JWT_SECRET_KEY'),
+        secret: this.configService.get<string>(key),
       });
       console.log(`[Service] Verified JWT: ${JSON.stringify(verifiedData)}`);
       return [true, verifiedData];
@@ -106,5 +107,26 @@ export class AuthService {
     // * Create user
     await this.usersService.create({ username, password });
     return true;
+  }
+
+  async refreshToken(token: string): Promise<[string, string]> {
+    // Refresh token logic goes here
+    console.log(`[Service] Refreshing token: ${token}`);
+    const [isValid, payload] = this.verify_JWT(token, JWT_REFRESH_KEY);
+    if (!isValid) {
+      console.error(`[Service] Invalid token: ${token}`);
+      return [null, null];
+    }
+
+    // * Check if token is in Redis / Database
+    const user = await this.usersService.findOne({ username: payload.username });
+    if (!user) {
+      console.error(`[Service] User not found: ${payload.username}`);
+      return [null, null];
+    }
+
+    // * Generate new tokens
+    const [newToken, newRefreshToken] = await this.get_tokens(user);
+    return [newToken, newRefreshToken];
   }
 }

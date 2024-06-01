@@ -1,5 +1,8 @@
 import { JwtModuleAsyncOptions } from '@nestjs/jwt';
 
+export const JWT_KEY = 'JWT_SECRET_KEY';
+export const JWT_REFRESH_KEY = 'JWT_SECRET_RKEY';
+
 export const jwtConfig = (): JwtModuleAsyncOptions => {
   return {
     useFactory: () => ({
