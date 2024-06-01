@@ -100,9 +100,9 @@ export class AuthService {
     }
 
     // * Check if user exists
-    const user = this.usersService.findOne({ username: username });
+    const user = await this.usersService.findOne({ username: username });
     if (user) {
-      this.logger.debug(`[Service] User ${username} already exists`);
+      this.logger.debug(`User ${username} already exists`);
       return false;
     }
 

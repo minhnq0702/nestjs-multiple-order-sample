@@ -11,12 +11,7 @@ export class LoggerService extends Logger {
     this.context = context;
     this.logger = winston.createLogger({
       level: 'info',
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.padLevels(),
-        winston.format.simple(),
-        winston.format.ms(),
-      ),
+      format: winston.format.combine(winston.format.timestamp(), winston.format.padLevels(), winston.format.simple()),
       transports: [
         new winston.transports.Console({
           level: 'silly',

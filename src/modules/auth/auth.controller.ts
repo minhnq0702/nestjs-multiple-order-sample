@@ -3,7 +3,7 @@ import { AuthService } from '@module/auth/auth.service';
 import { LoggerService } from '@module/logger/logger.service';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
-import { LoginFail } from '@src/entities/error.entity';
+import { LoginFail, RegisterFail } from '@src/entities/error.entity';
 import { Response } from 'express';
 
 @Controller('auth')
@@ -44,10 +44,17 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  async register(@Body() registerPayload: RegisterDto) {
+  async register(@Body() registerPayload: RegisterDto, @Res() res: Response) {
     console.debug('Register payload', registerPayload);
-    await this.authServce.register(registerPayload.username, registerPayload.password);
-    return '// TODO this is register API';
+    const success = await this.authServce.register(registerPayload.username, registerPayload.password);
+    if (!success) {
+      throw new RegisterFail({
+        msg: 'User already exists',
+      });
+    }
+    return res.status(201).send({
+      msg: 'Register successfully!',
+    });
   }
 
   @Public()

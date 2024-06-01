@@ -11,6 +11,12 @@ export class MyException extends Error {
   }
 }
 
+export class RegisterFail extends MyException {
+  httpStatus = STATUS.BAD_REQUEST;
+  code = 400;
+  error = 'REGISTER_FAIL'; // ? should add more detail errors
+}
+
 export class UserNotFound extends MyException {
   httpStatus = STATUS.NOT_FOUND;
   code = 404;
