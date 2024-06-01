@@ -8,7 +8,9 @@ import { LoggerService } from './modules/logger/logger.service';
 import AllExceptionFilter from './svc/http.exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
 
   // * define global prefix
   app.setGlobalPrefix('/api');
