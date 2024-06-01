@@ -70,6 +70,13 @@ export class AuthService {
     });
   }
 
+  private async sign_REFRESH_JWT(signPayload: SignPayload) {
+    return this.jwtService.signAsync(signPayload, {
+      secret: this.configService.get<string>('JWT_SECRET_RKEY'),
+      expiresIn: this.configService.get<string>('JWT_REXPRIES_IN'),
+    });
+  }
+
   verify_JWT(token: string): [boolean, VerifiedPayload] {
     try {
       const verifiedData = this.jwtService.verify<VerifiedPayload>(token, {
@@ -80,13 +87,6 @@ export class AuthService {
     } catch (error) {
       return [false, null];
     }
-  }
-
-  private async sign_REFRESH_JWT(signPayload: SignPayload) {
-    return this.jwtService.signAsync(signPayload, {
-      secret: this.configService.get<string>('JWT_SECRET_RKEY'),
-      expiresIn: this.configService.get<string>('JWT_REXPRIES_IN'),
-    });
   }
 
   async register(username: string, password: string): Promise<boolean> {
