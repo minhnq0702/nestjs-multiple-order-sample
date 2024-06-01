@@ -1,15 +1,14 @@
 import { SignPayload, VerifiedPayload } from '@dto/auth.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_REFRESH_KEY } from '@src/config/jwt.config';
 import { User } from '@src/entities/user.entity';
-import { WinstonLogger } from 'nest-winston';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-  // private readonly logger = new Logger(AuthService.name);
+  private readonly logger = new Logger(AuthService.name);
   usersService: UsersService;
   jwtService: JwtService;
 
@@ -17,7 +16,6 @@ export class AuthService {
     usersService: UsersService,
     jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly logger: WinstonLogger,
   ) {
     this.usersService = usersService;
     this.jwtService = jwtService;
