@@ -10,6 +10,11 @@ export class LoginDto {
 
 export class RegisterDto extends LoginDto {}
 
+export class RefreshTokenDto {
+  @IsString()
+  refreshToken: string;
+}
+
 export class SignPayload {
   username: string;
   email: string;

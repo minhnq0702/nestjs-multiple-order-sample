@@ -1,4 +1,4 @@
-import { LoginDto, RegisterDto } from '@dto/auth.dto';
+import { LoginDto, RefreshTokenDto, RegisterDto } from '@dto/auth.dto';
 import { AuthService } from '@module/auth/auth.service';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
@@ -48,8 +48,7 @@ export class AuthController {
 
   @Public()
   @Post('refresh')
-  async refreshToken(@Body() body: { refreshToken: string }, @Res() res: Response) {
-    console.log('refreshingToken', body);
+  async refreshToken(@Body() body: RefreshTokenDto, @Res() res: Response) {
     // Check if refresh token is valid by decode it
     // If valid, check if token is existed in Redis / Databse
     // If valid, generate new token + refreshToken and return them
@@ -61,7 +60,7 @@ export class AuthController {
     }
 
     return res.status(200).cookie('token', token, { httpOnly: true, secure: true, sameSite: 'lax' }).send({
-      msg: 'Token refreshed adfasdf 4234234',
+      msg: 'Token refreshed',
       refreshToken: refreshToken,
     });
   }
