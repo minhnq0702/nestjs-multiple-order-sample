@@ -85,7 +85,7 @@ export class AuthService {
       const verifiedData = this.jwtService.verify<VerifiedPayload>(token, {
         secret: this.configService.get<string>(key),
       });
-      console.log(`[Service] Verified JWT: ${JSON.stringify(verifiedData)}`);
+      this.logger.debug(`Verified JWT: ${JSON.stringify(verifiedData)}`);
       return [true, verifiedData];
     } catch (error) {
       return [false, null];
@@ -94,7 +94,7 @@ export class AuthService {
 
   async register(username: string, password: string): Promise<boolean> {
     // Registration logic goes here
-    console.log(`[Service] Registering user: ${username} - ${password}`);
+    this.logger.debug(`Registering user: ${username}`);
     if (!username || !password) {
       return false;
     }
@@ -102,7 +102,7 @@ export class AuthService {
     // * Check if user exists
     const user = this.usersService.findOne({ username: username });
     if (user) {
-      console.error(`[Service] User ${username} already exists`);
+      this.logger.debug(`[Service] User ${username} already exists`);
       return false;
     }
 
