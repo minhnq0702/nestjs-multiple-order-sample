@@ -60,6 +60,7 @@ export class AuthController {
   @Public()
   @Post('refresh')
   async refreshToken(@Body() body: RefreshTokenDto, @Res() res: Response) {
+    // ! should update this api to get refreshToken from header `Authorization: Bearer ${refreshToken}`
     // Check if refresh token is valid by decode it
     // If valid, check if token is existed in Redis / Databse
     // If valid, generate new token + refreshToken and return them
