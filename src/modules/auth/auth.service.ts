@@ -2,6 +2,7 @@ import { SignPayload, VerifiedPayload } from '@dto/auth.dto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@src/entities/user.entity';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -39,6 +40,15 @@ export class AuthService {
       return false;
     }
 
+    // * Generate tokens
+    const [token, refreshToken] = await this.get_tokens(user);
+
+    // * Update refresh token in user
+    this.usersService.update(user, { refreshToken: refreshToken });
+    return [token, refreshToken];
+  }
+
+  private async get_tokens(user: User): Promise<[string, string]> {
     return Promise.all([
       this.sign_JWT({
         username: user.username,
