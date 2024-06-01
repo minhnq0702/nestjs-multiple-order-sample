@@ -2,7 +2,7 @@ import { AuthService } from '@module/auth/auth.service';
 import { UsersModule } from '@module/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { jwtConfig } from '@src/config/jwt.config';
+// import { jwtConfig } from '@src/config/jwt.config';
 import { getMockRedisManager } from '@src/svc/tools/mockRedis';
 import { RedisManagerType } from '@src/svc/tools/redis';
 
@@ -34,7 +34,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UsersModule, JwtModule.registerAsync(jwtConfig())],
+      imports: [UsersModule, JwtModule],
       providers: [
         AuthService,
         {
