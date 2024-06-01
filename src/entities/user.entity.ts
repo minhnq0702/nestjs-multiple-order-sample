@@ -14,12 +14,14 @@ export class User {
   }
 }
 
-// add 20 sample users
+// add 20 mock users
 export const sampleUsers: User[] = Array.from({ length: 20 }, (_, i) => {
   return {
     id: i + 1,
     username: `user${i + 1}`,
     password: `password${i + 1}`,
     email: `user${i + 1}@gamil.com`,
+    refreshToken: `refreshToken${i + 1}`,
+    updateDate: new Date(),
   };
 });
