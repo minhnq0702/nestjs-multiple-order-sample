@@ -1,13 +1,20 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { MyException } from '@src/entities/error.entity';
+import { LoggerService } from '@src/modules/logger/logger.service';
 
 @Catch()
 export default class AllExceptionFilter implements ExceptionFilter {
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  constructor(
+    private readonly httpAdapterHost: HttpAdapterHost,
+    private readonly logger: LoggerService,
+  ) {}
 
   catch(exception: Error, host: ArgumentsHost): void {
-    console.debug('[AllExceptionFilter] exception', exception);
+    // ? how to handle logging exception by loggerSvc
+    // this.logger.error(`[AllExceptionFilter] exception ${exception}`, exception.stack);
+    console.log(exception);
+
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
 

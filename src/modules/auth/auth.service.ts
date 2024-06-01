@@ -1,14 +1,15 @@
 import { SignPayload, VerifiedPayload } from '@dto/auth.dto';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_REFRESH_KEY } from '@src/config/jwt.config';
 import { User } from '@src/entities/user.entity';
+import { LoggerService } from '../logger/logger.service';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
+  // private readonly logger = new Logger(AuthService.name);
   usersService: UsersService;
   jwtService: JwtService;
 
@@ -16,6 +17,7 @@ export class AuthService {
     usersService: UsersService,
     jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly logger: LoggerService,
   ) {
     this.usersService = usersService;
     this.jwtService = jwtService;
@@ -31,13 +33,13 @@ export class AuthService {
     // * Find user by username
     const user = await this.usersService.findOne({ username: username });
     if (!user) {
-      this.logger.error(`User ${username} not found`);
+      this.logger.debug(`User ${username} not found`);
       return false;
     }
 
     // * Check password
     if ((await this.usersService.comparePassword(password, user.password)) === false) {
-      this.logger.error(`Invalid password for ${username}`);
+      this.logger.debug(`Invalid password for ${username}`);
       return false;
     }
 
@@ -114,19 +116,19 @@ export class AuthService {
     this.logger.log(`Refreshing token: ${token}`);
     const [isValid, payload] = this.verify_JWT(token, JWT_REFRESH_KEY);
     if (!isValid) {
-      this.logger.error(`Invalid token: ${token}`);
+      this.logger.debug(`Invalid token: ${token}`);
       return [null, null];
     }
 
     // * Check if token is in Redis / Database
     const user = await this.usersService.findOne({ username: payload.username });
     if (!user) {
-      this.logger.error(`User not found: ${payload.username}`);
+      this.logger.debug(`User not found: ${payload.username}`);
       return [null, null];
     }
 
     if (!user.refreshToken || user.refreshToken !== token) {
-      this.logger.error(`Invalid refresh token: ${token}`);
+      this.logger.debug(`Invalid refresh token: ${token}`);
       return [null, null];
     }
 

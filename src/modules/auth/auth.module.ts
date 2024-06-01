@@ -1,4 +1,5 @@
 import { AuthService } from '@module/auth/auth.service';
+import { LoggerModule } from '@module/logger/logger.module';
 import { UsersModule } from '@module/users/users.module';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
@@ -7,7 +8,7 @@ import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 
 @Module({
-  imports: [UsersModule, JwtModule],
+  imports: [LoggerModule.register('AuthModule'), UsersModule, JwtModule],
   controllers: [AuthController],
   providers: [
     AuthService,

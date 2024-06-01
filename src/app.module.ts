@@ -5,6 +5,8 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoggerModule } from './modules/logger/logger.module';
+import { LoggerService } from './modules/logger/logger.service';
 
 const _configModule = ConfigModule.forRoot({
   envFilePath: ['.env', '.env.local'],
@@ -13,18 +15,21 @@ const _configModule = ConfigModule.forRoot({
 });
 
 @Module({
-  imports: [AuthModule, UsersModule, OrdersModule, _configModule],
+  imports: [LoggerModule.register('RootApp'), AuthModule, UsersModule, OrdersModule, _configModule],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
-  constructor() {
-    console.log('[Module] App created');
+  constructor(private readonly logger: LoggerService) {
+    this.logger.log('RootApp created');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   configure(consumer: MiddlewareConsumer) {
-    // Middleware configuration goes here
-    console.log(`[Module] AppModule Middleware configuration ${consumer}}`);
+    // Middleware configuration
+    this.logger.log(`AppModule Middleware configuration`);
+
+    // User consumer to apply your middleware to specific routes
     // consumer.apply(SampleMiddleware).forRoutes('*');
   }
 }

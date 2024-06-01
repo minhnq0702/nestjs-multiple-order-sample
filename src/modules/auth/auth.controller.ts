@@ -1,5 +1,6 @@
 import { LoginDto, RefreshTokenDto, RegisterDto } from '@dto/auth.dto';
 import { AuthService } from '@module/auth/auth.service';
+import { LoggerService } from '@module/logger/logger.service';
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
 import { LoginFail } from '@src/entities/error.entity';
@@ -7,7 +8,10 @@ import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authServce: AuthService) {}
+  constructor(
+    private readonly authServce: AuthService,
+    private readonly logger: LoggerService,
+  ) {}
 
   @Public()
   @Post('login')
@@ -49,6 +53,7 @@ export class AuthController {
   @Public()
   @Post('refresh')
   async refreshToken(@Body() body: RefreshTokenDto, @Res() res: Response) {
+    this.logger.log('Cai gi day troi oi');
     // Check if refresh token is valid by decode it
     // If valid, check if token is existed in Redis / Databse
     // If valid, generate new token + refreshToken and return them

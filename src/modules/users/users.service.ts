@@ -1,4 +1,5 @@
 import { User } from '@entities/user.entity';
+import { LoggerService } from '@module/logger/logger.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { UserAlreadyExist } from '@src/entities/error.entity';
 import { RedisManagerType } from '@src/svc/tools/redis';
@@ -7,9 +8,10 @@ import { v4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(RedisManagerType) private readonly redisClient: RedisManagerType) {
-    console.log('[Service] UsersService instantiated');
-  }
+  constructor(
+    @Inject(RedisManagerType) private readonly redisClient: RedisManagerType,
+    private readonly logger: LoggerService,
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
@@ -30,7 +32,7 @@ export class UsersService {
       const u: User = JSON.parse(_user);
       return u;
     } catch (error) {
-      console.error('Error parsing user from Redis', error);
+      this.logger.error('Error parsing user from Redis', error);
       return null;
     }
   }

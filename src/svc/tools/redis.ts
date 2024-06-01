@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { LoggerService } from '@src/modules/logger/logger.service';
 import { RedisClientType, createClient } from 'redis';
 
 // adding interface for RedisManager
@@ -17,9 +18,12 @@ export const RedisManagerType = Symbol('RedisManagerType');
 export class RedisManager implements RedisManagerType {
   private static instance: RedisManager;
   private client: RedisClientType;
+  private readonly logger: LoggerService;
 
   constructor(private readonly configService: ConfigService) {
     if (!RedisManager.instance) {
+      // ? shuold import logger svc which is provided in modules level?
+      this.logger = new LoggerService('RedisManager');
       this.client = createClient({
         url: this.configService.get('REDIS_URL'),
       });
@@ -29,9 +33,9 @@ export class RedisManager implements RedisManagerType {
       this.client.connect();
       RedisManager.instance = this;
       // eslint-disable-next-line prettier/prettier
-      console.log('[Tools] RedisManager constructor', this.configService.get('REDIS_URL'));
+      this.logger.log(`RedisManager initialize.....`);
     } else {
-      console.log('[Tools] RedisManager instance already exists');
+      RedisManager.instance.logger.warn('RedisManager instance already exists');
     }
     return RedisManager.instance;
   }
