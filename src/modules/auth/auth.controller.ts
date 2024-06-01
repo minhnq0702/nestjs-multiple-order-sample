@@ -60,7 +60,6 @@ export class AuthController {
   @Public()
   @Post('refresh')
   async refreshToken(@Body() body: RefreshTokenDto, @Res() res: Response) {
-    this.logger.log('Cai gi day troi oi');
     // Check if refresh token is valid by decode it
     // If valid, check if token is existed in Redis / Databse
     // If valid, generate new token + refreshToken and return them
