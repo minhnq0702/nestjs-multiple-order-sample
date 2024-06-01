@@ -38,12 +38,12 @@ export class UsersService {
 
   async create(user: User): Promise<User> {
     // Check if user already exists in redis
-    const userExists = this.checkExistence(user.username);
+    const userIsExisted = this.checkExistence(user.username);
 
     // hash password
     const _hashPassword = this.hashPassword(user.password);
 
-    if (await userExists) {
+    if (await userIsExisted) {
       throw new UserAlreadyExist();
     } else {
       // generate uuid
@@ -52,6 +52,27 @@ export class UsersService {
     }
 
     // add user to Redis
+    this.redisClient.set(`user:${user.username}`, JSON.stringify(user));
+    return user;
+  }
+
+  async update(user: User, fieldsUpdate: { refreshToken?: string }): Promise<User> {
+    // Check if user exists
+    const _user = await this.findOne({ username: user.username });
+    if (!_user) {
+      return null;
+    }
+
+    if (fieldsUpdate) {
+      Object.keys(fieldsUpdate).forEach((key) => {
+        if (fieldsUpdate[key] !== undefined) {
+          _user[key] = fieldsUpdate[key];
+        }
+      });
+      user.updateDate = new Date();
+    }
+
+    // update user in Redis
     this.redisClient.set(`user:${user.username}`, JSON.stringify(user));
     return user;
   }
