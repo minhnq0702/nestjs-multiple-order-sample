@@ -3,19 +3,21 @@ import { UpdateOrderDto } from '@dto/update-order.dto';
 import { Order, sampleOrders } from '@entities/order.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { RedisManagerType } from '@svc/tools/redis';
+import { LoggerService } from '../logger/logger.service';
 
 const _AVAILABLE_PRODUCTS: number = 10;
 
 @Injectable()
 export class OrdersService {
-  constructor(@Inject(RedisManagerType) private readonly redisClient: RedisManagerType) {
-    console.log('[Service] OrdersService instantiated');
-  }
+  constructor(
+    @Inject(RedisManagerType) private readonly redisClient: RedisManagerType,
+    private readonly logger: LoggerService,
+  ) {}
 
   async createOrder(productKey: string): Promise<string> {
     const sold = await this.redisClient.get(productKey);
     if (!sold) {
-      console.log(`[OrderSvc] Product ${productKey} not found, creating new key`);
+      this.logger.log(`[OrderSvc] Product ${productKey} not found, creating new key`);
       await this.redisClient.setnx(productKey, '0');
     }
 
