@@ -23,6 +23,7 @@ export class LoggerService extends Logger {
             }),
           ),
         }),
+
         // new winston.transports.DailyRotateFile({
         //   dirname: `logs/access`,
         //   filename: '%DATE%.log',

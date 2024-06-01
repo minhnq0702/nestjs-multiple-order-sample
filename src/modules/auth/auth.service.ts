@@ -113,7 +113,6 @@ export class AuthService {
 
   async refreshToken(token: string): Promise<[string, string]> {
     // Refresh token logic goes here
-    this.logger.log(`Refreshing token: ${token}`);
     const [isValid, payload] = this.verify_JWT(token, JWT_REFRESH_KEY);
     if (!isValid) {
       this.logger.debug(`Invalid token: ${token}`);
