@@ -45,4 +45,21 @@ export class AuthController {
     await this.authServce.register(registerPayload.username, registerPayload.password);
     return '// TODO this is register API';
   }
+
+  @Public()
+  @Post('refresh')
+  async refreshToken(@Body() body: object, @Res() res: Response) {
+    console.log('refreshingToken', body);
+    // Check if refresh token is valid by decode it
+
+    // If valid, check if token is existed in Redis / Databse
+
+    // If not, return 401
+
+    // If valid, generate new token + refreshToken and return them
+    return res.status(200).cookie('token', 'refreshedToken').send({
+      msg: 'Token refreshed',
+      refreshToken: 'Refreshed token',
+    });
+  }
 }
