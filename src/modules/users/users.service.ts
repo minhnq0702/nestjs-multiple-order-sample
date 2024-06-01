@@ -37,6 +37,17 @@ export class UsersService {
     }
   }
 
+  async listUsers(): Promise<User[]> {
+    const users: User[] = [];
+    const keys = await this.redisClient.keys('user:*');
+    for (const key of keys) {
+      console.log(key);
+      const user = await this.redisClient.get(key);
+      users.push(JSON.parse(user));
+    }
+    return users;
+  }
+
   async create(user: User): Promise<User> {
     // Check if user already exists in redis
     const userIsExisted = this.checkExistence(user.username);
@@ -76,6 +87,12 @@ export class UsersService {
     // update user in Redis
     this.redisClient.set(`user:${_user.username}`, JSON.stringify(_user));
     return user;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async delete(user: User): Promise<boolean> {
+    // TODO delete user from Redis
+    return new Promise((resolve) => resolve(true));
   }
 
   async checkExistence(username: string): Promise<boolean> {
