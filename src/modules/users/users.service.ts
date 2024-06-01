@@ -41,7 +41,6 @@ export class UsersService {
     const users: User[] = [];
     const keys = await this.redisClient.keys('user:*');
     for (const key of keys) {
-      console.log(key);
       const user = await this.redisClient.get(key);
       users.push(JSON.parse(user));
     }
