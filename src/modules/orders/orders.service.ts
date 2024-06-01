@@ -1,9 +1,9 @@
 import { CreateOrderDto } from '@dto/create-order.dto';
 import { UpdateOrderDto } from '@dto/update-order.dto';
 import { Order, sampleOrders } from '@entities/order.entity';
+import { LoggerService } from '@module/logger/logger.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { RedisManagerType } from '@svc/tools/redis';
-import { LoggerService } from '../logger/logger.service';
 
 const _AVAILABLE_PRODUCTS: number = 10;
 

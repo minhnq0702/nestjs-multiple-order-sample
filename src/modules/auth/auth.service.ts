@@ -1,11 +1,11 @@
 import { SignPayload, VerifiedPayload } from '@dto/auth.dto';
+import { LoggerService } from '@module/logger/logger.service';
+import { UsersService } from '@module/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { JWT_REFRESH_KEY } from '@src/config/jwt.config';
 import { User } from '@src/entities/user.entity';
-import { LoggerService } from '../logger/logger.service';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {

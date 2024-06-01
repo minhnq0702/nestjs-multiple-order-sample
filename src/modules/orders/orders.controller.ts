@@ -1,5 +1,6 @@
 import { CreateOrderDto } from '@dto/create-order.dto';
 import { UpdateOrderDto } from '@dto/update-order.dto';
+import { LoggerService } from '@module/logger/logger.service';
 import { Body, Controller, Delete, Get, Header, Param, Patch, Post, Req, Res } from '@nestjs/common';
 import { Public } from '@src/config/auth.config';
 import { OrdersService } from '@src/modules/orders/orders.service';
@@ -11,7 +12,10 @@ export type order = {
 
 @Controller('/orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly logger: LoggerService,
+  ) {}
 
   @Public()
   @Post('/benchmark-over-qty')
@@ -26,7 +30,7 @@ export class OrdersController {
     }
 
     const ordered = await this.ordersService.createOrder(productKey);
-    console.log('[OrderCtrl]', ordered);
+    this.logger.log('[OrderCtrl]', ordered);
     res.status(201).send({
       msg: ordered,
     });

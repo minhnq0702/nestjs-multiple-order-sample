@@ -1,7 +1,7 @@
+import { LoggerModule } from '@module/logger/logger.module';
 import { Module } from '@nestjs/common';
 import { OrdersService } from '@src/modules/orders/orders.service';
 import { RedisManagerType, getRedisManager } from '@svc/tools/redis';
-import { LoggerModule } from '../logger/logger.module';
 import { OrdersController } from './orders.controller';
 
 @Module({
