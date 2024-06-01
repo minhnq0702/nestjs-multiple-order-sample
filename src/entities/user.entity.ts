@@ -4,7 +4,8 @@ export class User {
   password: string;
   email?: string;
   refreshToken?: string;
-  updateDate?: Date;
+  createAt?: Date;
+  updateAt?: Date;
 
   constructor(id: number, username: string, password: string, email: string) {
     this.id = id;

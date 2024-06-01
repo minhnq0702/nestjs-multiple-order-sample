@@ -23,18 +23,14 @@ export class UsersService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findOne({ id, username }: { id?: number | string; username?: string }): Promise<User> {
-    const _user: string = await this.redisClient.get(`user:${username}`);
-    if (!_user) {
+    const key: string[] = await this.redisClient.keys(`user:*:${username}`);
+    if (key.length === 0) {
       return null;
     }
 
-    try {
-      const u: User = JSON.parse(_user);
-      return u;
-    } catch (error) {
-      this.logger.error('Error parsing user from Redis', error);
-      return null;
-    }
+    const _user: string = await this.redisClient.get(key[0]);
+    const u: User = JSON.parse(_user);
+    return u;
   }
 
   async listUsers(): Promise<User[]> {
@@ -60,10 +56,11 @@ export class UsersService {
       // generate uuid
       user.id = v4().toString();
       user.password = await _hashPassword;
+      user.createAt = new Date();
     }
 
     // add user to Redis
-    this.redisClient.set(`user:${user.username}`, JSON.stringify(user));
+    this.redisClient.set(`user:${user.id}:${user.username}`, JSON.stringify(user));
     return user;
   }
 
@@ -80,11 +77,11 @@ export class UsersService {
           _user[key] = fieldsUpdate[key];
         }
       });
-      _user.updateDate = new Date();
+      _user.updateAt = new Date();
     }
 
     // update user in Redis
-    this.redisClient.set(`user:${_user.username}`, JSON.stringify(_user));
+    this.redisClient.set(`user:${_user.id}:${_user.username}`, JSON.stringify(_user));
     return user;
   }
 
@@ -96,7 +93,7 @@ export class UsersService {
 
   async checkExistence(username: string): Promise<boolean> {
     // check if user exists in Redis
-    const user = await this.redisClient.get(`user:${username}`);
+    const user = await this.redisClient.keys(`user:*:${username}`);
     return user !== null;
   }
 }
