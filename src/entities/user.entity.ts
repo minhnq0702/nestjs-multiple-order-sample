@@ -3,6 +3,8 @@ export class User {
   username: string;
   password: string;
   email?: string;
+  refreshToken?: string;
+  updateDate?: Date;
 
   constructor(id: number, username: string, password: string, email: string) {
     this.id = id;
