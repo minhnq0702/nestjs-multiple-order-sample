@@ -11,9 +11,7 @@ export default class AllExceptionFilter implements ExceptionFilter {
   ) {}
 
   catch(exception: Error, host: ArgumentsHost): void {
-    // ? how to handle logging exception by loggerSvc
-    // this.logger.error(`[AllExceptionFilter] exception ${exception}`, exception.stack);
-    console.log(exception);
+    this.logger.error(`[AllExceptionFilter] exception ${JSON.stringify(exception)}`, exception.stack);
 
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
@@ -21,6 +19,7 @@ export default class AllExceptionFilter implements ExceptionFilter {
     let code: number = 1;
     let statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR;
     let error: string | object = 'INTERNAL_SERVER_ERROR';
+    let message: string | string[] | null;
     let additional: object | null = null;
     switch (true) {
       case exception instanceof MyException:
@@ -30,10 +29,11 @@ export default class AllExceptionFilter implements ExceptionFilter {
         additional = exception.additional;
         break;
       case exception instanceof HttpException:
-        statusCode = exception.getStatus();
-        error = exception.getResponse();
-        if (typeof error === 'object' && error.hasOwnProperty('message')) {
-          error = error['message'];
+        code = statusCode = exception.getStatus();
+        const httpError = exception.getResponse();
+        if (typeof httpError === 'object' && httpError.hasOwnProperty('message')) {
+          error = httpError['error'];
+          message = httpError['message'];
         }
         break;
       case exception instanceof Error:
@@ -46,6 +46,7 @@ export default class AllExceptionFilter implements ExceptionFilter {
     const responseBody = {
       code,
       error,
+      message,
       timestamp: new Date().toISOString(),
       // path: httpAdapter.getRequestUrl(ctx.getRequest()),
       additional,
